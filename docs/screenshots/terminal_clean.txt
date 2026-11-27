@@ -1,0 +1,5 @@
+$ python -m pii_redactor scan examples/clean_output.txt --fail-on low
+model-pii-redactor 0.1.0  scan  examples/clean_output.txt  (10 lines, 379 chars)
+summary: 0 finding(s): 0 high, 0 medium, 0 low
+PASS: no finding at or above severity 'low'
+[exit code: 0]

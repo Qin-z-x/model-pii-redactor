@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "model-pii-redactor"
+version = "0.1.0"
+description = "Detect and redact PII and secrets in LLM output: emails, phones, Luhn-checked credit cards, private IPs, API keys (sk-/ghp_/AKIA/AIza/xoxb/glpat-), JWTs, bearer and AWS secret tokens, with report/redact/hash modes. Stdlib-only Python CLI."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "pii-redactor contributors" }]
+keywords = ["pii", "redaction", "llm", "security", "privacy", "secrets", "regex", "cli", "python"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security",
+]
+dependencies = []
+
+[project.scripts]
+pii-redactor = "pii_redactor.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Qin-z-x/model-pii-redactor"
+Repository = "https://github.com/Qin-z-x/model-pii-redactor"
+Issues = "https://github.com/Qin-z-x/model-pii-redactor/issues"
+Changelog = "https://github.com/Qin-z-x/model-pii-redactor/blob/main/CHANGELOG.md"
+Evidence = "https://github.com/Qin-z-x/model-pii-redactor/blob/main/docs/EVIDENCE.md"
+ThreatModel = "https://github.com/Qin-z-x/model-pii-redactor/blob/main/docs/THREAT_MODEL.md"
+
+[tool.setuptools]
+packages = ["pii_redactor"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

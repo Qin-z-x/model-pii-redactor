@@ -1,0 +1,13 @@
+Here is the customer record you asked for:
+
+Name: Jane Doe
+Email: [REDACTED:EMAIL]
+Phone: [REDACTED:PHONE]
+Backup phone: [REDACTED:PHONE]
+Card on file: [REDACTED:CREDIT_CARD]
+Private endpoint: [REDACTED:PRIVATE_IP] (staging)
+API key: [REDACTED:API_KEY]
+Legacy key: [REDACTED:API_KEY]
+AWS access key: [REDACTED:API_KEY]
+Session token: [REDACTED:JWT]
+Database password = "[REDACTED:SECRET]"

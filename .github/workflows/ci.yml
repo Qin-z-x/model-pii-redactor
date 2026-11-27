@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Core must be standard-library only
+        run: python scripts/check_core_deps.py
+
+      - name: Unit tests (unittest, no third-party dependencies)
+        run: python -m unittest discover -s tests -t .
+
+      - name: CLI smoke test: PII is detected
+        run: python -m pii_redactor scan examples/poisoned_output.txt --json > scan.json && python -c "import json; d=json.load(open('scan.json', encoding='utf-8')); assert d['summary']['counts']['CREDIT_CARD'] == 1; assert d['summary']['by_severity']['high'] >= 3; print('findings:', d['summary'])"
+
+      - name: Redacted output scans clean at the strictest gate
+        run: |
+          python -m pii_redactor redact examples/poisoned_output.txt -o redacted.txt
+          python -m pii_redactor scan redacted.txt --fail-on low
+
+      - name: Clean output passes
+        run: python -m pii_redactor scan examples/clean_output.txt --fail-on low
+
+      - name: CI gate catches leaked PII (expected exit code 1)
+        run: |
+          set +e
+          python -m pii_redactor scan examples/poisoned_output.txt --fail-on high
+          code=$?
+          set -e
+          echo "scan exit code: $code"
+          test "$code" -eq 1

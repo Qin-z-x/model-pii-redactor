@@ -1,0 +1,98 @@
+{
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.15",
+    "package_version": "0.1.0",
+    "captured_at_utc": "2026-11-27T00:46:12Z",
+    "command_count": 8,
+    "test_count": 40,
+    "tests_ok": true
+  },
+  "runs": [
+    {
+      "index": 0,
+      "label": "scan model output with PII",
+      "command": "python -m pii_redactor scan examples/poisoned_output.txt",
+      "exit_code": 0,
+      "stdout": "model-pii-redactor 0.1.0  scan  examples/poisoned_output.txt  (13 lines, 507 chars)\nMEDIUM EMAIL        line 4    col 8    j***@acme-corp.example (email address)\nMEDIUM PHONE        line 5    col 8    ***32 (phone number)\nMEDIUM PHONE        line 6    col 15   ***78 (phone number)\nHIGH   CREDIT_CARD  line 7    col 15   **** **** **** 1111 (credit card number with a valid Luhn checksum)\nLOW    PRIVATE_IP   line 8    col 19   10.12.***.*** (private/loopback IPv4 address)\nHIGH   API_KEY      line 9    col 10   sk-p***45 (openai-style sk- key)\nHIGH   API_KEY      line 10   col 13   ghp_***yz (GitHub ghp_ token)\nHIGH   API_KEY      line 11   col 17   AKIA***LE (AWS access key id)\nHIGH   JWT          line 12   col 16   eyJh***8U (JSON Web Token)\nHIGH   SECRET       line 13   col 22   hunt***et (secret assignment)\nsummary: 10 finding(s): 6 high, 3 medium, 1 low\n",
+      "stderr": "",
+      "expect_exit": null
+    },
+    {
+      "index": 1,
+      "label": "machine-readable scan",
+      "command": "python -m pii_redactor scan examples/poisoned_output.txt --json",
+      "exit_code": 0,
+      "stdout": "{\n  \"tool\": \"model-pii-redactor\",\n  \"version\": \"0.1.0\",\n  \"mode\": \"report\",\n  \"summary\": {\n    \"total\": 10,\n    \"counts\": {\n      \"EMAIL\": 1,\n      \"PHONE\": 2,\n      \"CREDIT_CARD\": 1,\n      \"PRIVATE_IP\": 1,\n      \"API_KEY\": 3,\n      \"JWT\": 1,\n      \"SECRET\": 1\n    },\n    \"by_severity\": {\n      \"low\": 1,\n      \"medium\": 3,\n      \"high\": 6\n    },\n    \"max_severity\": \"high\"\n  },\n  \"clean\": false,\n  \"findings\": [\n    {\n      \"kind\": \"EMAIL\",\n      \"severity\": \"medium\",\n      \"start\": 66,\n      \"end\": 92,\n      \"length\": 26,\n      \"preview\": \"j***@acme-corp.example\",\n      \"detail\": \"email address\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 100,\n      \"end\": 115,\n      \"length\": 15,\n      \"preview\": \"***32\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 130,\n      \"end\": 141,\n      \"length\": 11,\n      \"preview\": \"***78\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"CREDIT_CARD\",\n      \"severity\": \"high\",\n      \"start\": 156,\n      \"end\": 175,\n      \"length\": 19,\n      \"preview\": \"**** **** **** 1111\",\n      \"detail\": \"credit card number with a valid Luhn checksum\"\n    },\n    {\n      \"kind\": \"PRIVATE_IP\",\n      \"severity\": \"low\",\n      \"start\": 194,\n      \"end\": 205,\n      \"length\": 11,\n      \"preview\": \"10.12.***.***\",\n      \"detail\": \"private/loopback IPv4 address\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 225,\n      \"end\": 265,\n      \"length\": 40,\n      \"preview\": \"sk-p***45\",\n      \"detail\": \"openai-style sk- key\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 278,\n      \"end\": 318,\n      \"length\": 40,\n      \"preview\": \"ghp_***yz\",\n      \"detail\": \"GitHub ghp_ token\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 335,\n      \"end\": 355,\n      \"length\": 20,\n      \"preview\": \"AKIA***LE\",\n      \"detail\": \"AWS access key id\"\n    },\n    {\n      \"kind\": \"JWT\",\n      \"severity\": \"high\",\n      \"start\": 371,\n      \"end\": 463,\n      \"length\": 92,\n      \"preview\": \"eyJh***8U\",\n      \"detail\": \"JSON Web Token\"\n    },\n    {\n      \"kind\": \"SECRET\",\n      \"severity\": \"high\",\n      \"start\": 485,\n      \"end\": 505,\n      \"length\": 20,\n      \"preview\": \"hunt***et\",\n      \"detail\": \"secret assignment\"\n    }\n  ],\n  \"path\": \"examples/poisoned_output.txt\"\n}\n",
+      "stderr": "",
+      "expect_exit": null
+    },
+    {
+      "index": 2,
+      "label": "CI gate at high severity",
+      "command": "python -m pii_redactor scan examples/poisoned_output.txt --fail-on high",
+      "exit_code": 1,
+      "stdout": "model-pii-redactor 0.1.0  scan  examples/poisoned_output.txt  (13 lines, 507 chars)\nMEDIUM EMAIL        line 4    col 8    j***@acme-corp.example (email address)\nMEDIUM PHONE        line 5    col 8    ***32 (phone number)\nMEDIUM PHONE        line 6    col 15   ***78 (phone number)\nHIGH   CREDIT_CARD  line 7    col 15   **** **** **** 1111 (credit card number with a valid Luhn checksum)\nLOW    PRIVATE_IP   line 8    col 19   10.12.***.*** (private/loopback IPv4 address)\nHIGH   API_KEY      line 9    col 10   sk-p***45 (openai-style sk- key)\nHIGH   API_KEY      line 10   col 13   ghp_***yz (GitHub ghp_ token)\nHIGH   API_KEY      line 11   col 17   AKIA***LE (AWS access key id)\nHIGH   JWT          line 12   col 16   eyJh***8U (JSON Web Token)\nHIGH   SECRET       line 13   col 22   hunt***et (secret assignment)\nsummary: 10 finding(s): 6 high, 3 medium, 1 low\n",
+      "stderr": "FAIL: 6 finding(s) at or above severity 'high'\n",
+      "expect_exit": 1
+    },
+    {
+      "index": 3,
+      "label": "redact the output",
+      "command": "python -m pii_redactor redact examples/poisoned_output.txt -o evidence/raw/redacted_output.txt",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "wrote evidence/raw/redacted_output.txt (mode=redact, findings=10: 6 high, 3 medium, 1 low)\n",
+      "expect_exit": null
+    },
+    {
+      "index": 4,
+      "label": "rescan the redacted output with the strictest gate",
+      "command": "python -m pii_redactor scan evidence/raw/redacted_output.txt --fail-on low",
+      "exit_code": 0,
+      "stdout": "model-pii-redactor 0.1.0  scan  evidence/raw/redacted_output.txt  (13 lines, 389 chars)\nsummary: 0 finding(s): 0 high, 0 medium, 0 low\nPASS: no finding at or above severity 'low'\n",
+      "stderr": "",
+      "expect_exit": 0
+    },
+    {
+      "index": 5,
+      "label": "hash mode is deterministic",
+      "command": "python -m pii_redactor redact examples/poisoned_output.txt --mode hash --json",
+      "exit_code": 0,
+      "stdout": "{\n  \"tool\": \"model-pii-redactor\",\n  \"version\": \"0.1.0\",\n  \"mode\": \"hash\",\n  \"summary\": {\n    \"total\": 10,\n    \"counts\": {\n      \"EMAIL\": 1,\n      \"PHONE\": 2,\n      \"CREDIT_CARD\": 1,\n      \"PRIVATE_IP\": 1,\n      \"API_KEY\": 3,\n      \"JWT\": 1,\n      \"SECRET\": 1\n    },\n    \"by_severity\": {\n      \"low\": 1,\n      \"medium\": 3,\n      \"high\": 6\n    },\n    \"max_severity\": \"high\"\n  },\n  \"clean\": false,\n  \"findings\": [\n    {\n      \"kind\": \"EMAIL\",\n      \"severity\": \"medium\",\n      \"start\": 66,\n      \"end\": 92,\n      \"length\": 26,\n      \"preview\": \"j***@acme-corp.example\",\n      \"detail\": \"email address\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 100,\n      \"end\": 115,\n      \"length\": 15,\n      \"preview\": \"***32\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 130,\n      \"end\": 141,\n      \"length\": 11,\n      \"preview\": \"***78\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"CREDIT_CARD\",\n      \"severity\": \"high\",\n      \"start\": 156,\n      \"end\": 175,\n      \"length\": 19,\n      \"preview\": \"**** **** **** 1111\",\n      \"detail\": \"credit card number with a valid Luhn checksum\"\n    },\n    {\n      \"kind\": \"PRIVATE_IP\",\n      \"severity\": \"low\",\n      \"start\": 194,\n      \"end\": 205,\n      \"length\": 11,\n      \"preview\": \"10.12.***.***\",\n      \"detail\": \"private/loopback IPv4 address\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 225,\n      \"end\": 265,\n      \"length\": 40,\n      \"preview\": \"sk-p***45\",\n      \"detail\": \"openai-style sk- key\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 278,\n      \"end\": 318,\n      \"length\": 40,\n      \"preview\": \"ghp_***yz\",\n      \"detail\": \"GitHub ghp_ token\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 335,\n      \"end\": 355,\n      \"length\": 20,\n      \"preview\": \"AKIA***LE\",\n      \"detail\": \"AWS access key id\"\n    },\n    {\n      \"kind\": \"JWT\",\n      \"severity\": \"high\",\n      \"start\": 371,\n      \"end\": 463,\n      \"length\": 92,\n      \"preview\": \"eyJh***8U\",\n      \"detail\": \"JSON Web Token\"\n    },\n    {\n      \"kind\": \"SECRET\",\n      \"severity\": \"high\",\n      \"start\": 485,\n      \"end\": 505,\n      \"length\": 20,\n      \"preview\": \"hunt***et\",\n      \"detail\": \"secret assignment\"\n    }\n  ],\n  \"text\": \"Here is the customer record you asked for:\\n\\nName: Jane Doe\\nEmail: EMAIL:sha256:f569babdd97e7986\\nPhone: PHONE:sha256:86d55c410a24e7af\\nBackup phone: PHONE:sha256:38aed9048140b0e4\\nCard on file: CREDIT_CARD:sha256:6a7e0e79b018d08c\\nPrivate endpoint: PRIVATE_IP:sha256:5f0cafc595ea6005 (staging)\\nAPI key: API_KEY:sha256:7c3d99d65e1b82d0\\nLegacy key: API_KEY:sha256:6675cd0c365d2c7d\\nAWS access key: API_KEY:sha256:1a5d44a2dca19669\\nSession token: JWT:sha256:7c5b0229189828de\\nDatabase password = \\\"SECRET:sha256:38a02ea9bf204387\\\"\\n\",\n  \"path\": \"examples/poisoned_output.txt\"\n}\n",
+      "stderr": "",
+      "expect_exit": null
+    },
+    {
+      "index": 6,
+      "label": "clean output passes",
+      "command": "python -m pii_redactor scan examples/clean_output.txt --fail-on low",
+      "exit_code": 0,
+      "stdout": "model-pii-redactor 0.1.0  scan  examples/clean_output.txt  (10 lines, 379 chars)\nsummary: 0 finding(s): 0 high, 0 medium, 0 low\nPASS: no finding at or above severity 'low'\n",
+      "stderr": "",
+      "expect_exit": 0
+    },
+    {
+      "index": 7,
+      "label": "report mode leaves the text unchanged",
+      "command": "python -m pii_redactor report examples/poisoned_output.txt --json",
+      "exit_code": 0,
+      "stdout": "{\n  \"tool\": \"model-pii-redactor\",\n  \"version\": \"0.1.0\",\n  \"mode\": \"report\",\n  \"summary\": {\n    \"total\": 10,\n    \"counts\": {\n      \"EMAIL\": 1,\n      \"PHONE\": 2,\n      \"CREDIT_CARD\": 1,\n      \"PRIVATE_IP\": 1,\n      \"API_KEY\": 3,\n      \"JWT\": 1,\n      \"SECRET\": 1\n    },\n    \"by_severity\": {\n      \"low\": 1,\n      \"medium\": 3,\n      \"high\": 6\n    },\n    \"max_severity\": \"high\"\n  },\n  \"clean\": false,\n  \"findings\": [\n    {\n      \"kind\": \"EMAIL\",\n      \"severity\": \"medium\",\n      \"start\": 66,\n      \"end\": 92,\n      \"length\": 26,\n      \"preview\": \"j***@acme-corp.example\",\n      \"detail\": \"email address\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 100,\n      \"end\": 115,\n      \"length\": 15,\n      \"preview\": \"***32\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"PHONE\",\n      \"severity\": \"medium\",\n      \"start\": 130,\n      \"end\": 141,\n      \"length\": 11,\n      \"preview\": \"***78\",\n      \"detail\": \"phone number\"\n    },\n    {\n      \"kind\": \"CREDIT_CARD\",\n      \"severity\": \"high\",\n      \"start\": 156,\n      \"end\": 175,\n      \"length\": 19,\n      \"preview\": \"**** **** **** 1111\",\n      \"detail\": \"credit card number with a valid Luhn checksum\"\n    },\n    {\n      \"kind\": \"PRIVATE_IP\",\n      \"severity\": \"low\",\n      \"start\": 194,\n      \"end\": 205,\n      \"length\": 11,\n      \"preview\": \"10.12.***.***\",\n      \"detail\": \"private/loopback IPv4 address\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 225,\n      \"end\": 265,\n      \"length\": 40,\n      \"preview\": \"sk-p***45\",\n      \"detail\": \"openai-style sk- key\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 278,\n      \"end\": 318,\n      \"length\": 40,\n      \"preview\": \"ghp_***yz\",\n      \"detail\": \"GitHub ghp_ token\"\n    },\n    {\n      \"kind\": \"API_KEY\",\n      \"severity\": \"high\",\n      \"start\": 335,\n      \"end\": 355,\n      \"length\": 20,\n      \"preview\": \"AKIA***LE\",\n      \"detail\": \"AWS access key id\"\n    },\n    {\n      \"kind\": \"JWT\",\n      \"severity\": \"high\",\n      \"start\": 371,\n      \"end\": 463,\n      \"length\": 92,\n      \"preview\": \"eyJh***8U\",\n      \"detail\": \"JSON Web Token\"\n    },\n    {\n      \"kind\": \"SECRET\",\n      \"severity\": \"high\",\n      \"start\": 485,\n      \"end\": 505,\n      \"length\": 20,\n      \"preview\": \"hunt***et\",\n      \"detail\": \"secret assignment\"\n    }\n  ],\n  \"text\": \"Here is the customer record you asked for:\\n\\nName: Jane Doe\\nEmail: jane.doe@acme-corp.example\\nPhone: +1 415 555 0132\\nBackup phone: 13812345678\\nCard on file: 4111 1111 1111 1111\\nPrivate endpoint: 10.12.34.56 (staging)\\nAPI key: sk-proj-AbCdEfGhIjKlMnOpQrStUvWxYz012345\\nLegacy key: ghp_0123456789abcdefghijklmnopqrstuvwxyz\\nAWS access key: AKIAIOSFODNN7EXAMPLE\\nSession token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U\\nDatabase password = \\\"hunter2-super-secret\\\"\\n\",\n  \"path\": \"examples/poisoned_output.txt\"\n}\n",
+      "stderr": "",
+      "expect_exit": null
+    }
+  ],
+  "examples": [
+    {
+      "path": "examples/poisoned_output.txt",
+      "bytes": 507,
+      "sha256": "b7ad2777eb0f4f2b295ba5a263cf9f048a675699b982a8b367b326f3526a8d96"
+    },
+    {
+      "path": "examples/clean_output.txt",
+      "bytes": 379,
+      "sha256": "5879bb7a7160c8762d7ea2dc26206c8cd1027648f214aa878e6ec06ff99191ca"
+    }
+  ],
+  "extra_files": []
+}

@@ -1,0 +1,13 @@
+Here is the customer record you asked for:
+
+Name: Jane Doe
+Email: jane.doe@acme-corp.example
+Phone: +1 415 555 0132
+Backup phone: 13812345678
+Card on file: 4111 1111 1111 1111
+Private endpoint: 10.12.34.56 (staging)
+API key: sk-proj-AbCdEfGhIjKlMnOpQrStUvWxYz012345
+Legacy key: ghp_0123456789abcdefghijklmnopqrstuvwxyz
+AWS access key: AKIAIOSFODNN7EXAMPLE
+Session token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U
+Database password = "hunter2-super-secret"

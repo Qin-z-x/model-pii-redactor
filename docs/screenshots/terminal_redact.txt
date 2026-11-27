@@ -1,0 +1,5 @@
+$ python -m pii_redactor redact examples/poisoned_output.txt -o evidence/raw/redacted_output.txt
+
+[stderr]
+wrote evidence/raw/redacted_output.txt (mode=redact, findings=10: 6 high, 3 medium, 1 low)
+[exit code: 0]

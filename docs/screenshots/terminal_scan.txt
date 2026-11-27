@@ -1,0 +1,14 @@
+$ python -m pii_redactor scan examples/poisoned_output.txt
+model-pii-redactor 0.1.0  scan  examples/poisoned_output.txt  (13 lines, 507 chars)
+MEDIUM EMAIL        line 4    col 8    j***@acme-corp.example (email address)
+MEDIUM PHONE        line 5    col 8    ***32 (phone number)
+MEDIUM PHONE        line 6    col 15   ***78 (phone number)
+HIGH   CREDIT_CARD  line 7    col 15   **** **** **** 1111 (credit card number with a valid Luhn checksum)
+LOW    PRIVATE_IP   line 8    col 19   10.12.***.*** (private/loopback IPv4 address)
+HIGH   API_KEY      line 9    col 10   sk-p***45 (openai-style sk- key)
+HIGH   API_KEY      line 10   col 13   ghp_***yz (GitHub ghp_ token)
+HIGH   API_KEY      line 11   col 17   AKIA***LE (AWS access key id)
+HIGH   JWT          line 12   col 16   eyJh***8U (JSON Web Token)
+HIGH   SECRET       line 13   col 22   hunt***et (secret assignment)
+summary: 10 finding(s): 6 high, 3 medium, 1 low
+[exit code: 0]

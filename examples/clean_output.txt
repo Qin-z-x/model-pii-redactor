@@ -1,0 +1,10 @@
+Here is the deployment summary you asked for:
+
+The service rolled out at 14:05 UTC and is healthy.
+Build version: v1.2.3 (commit 7f3a9c2)
+Request ID: 123e4567-e89b-12d3-a456-426614174000
+Public resolver used for the health check: 8.8.8.8
+Order number in the test fixture: 1234567890123
+Date of the incident report: 2026-11-27
+
+No customer identifiers are present in this answer.
