@@ -144,6 +144,13 @@ Bearer Token 以及 `password = ...` 形式的密钥赋值。核心库**仅使�
 日期和长订单号不会被当电话、`8.8.8.8`/`172.32.x.x` 不会被当私有 IP、非 Luhn 的
 16 位数字不会被当卡号、过短的 `sk-`/`ghp_`/`AKIA` 前缀不会命中。示例中的 PII 全部为
 合成数据；本项目是防御性工具，不声称发现新漏洞或新 CVE。
+
+## 视频演示
+
+B站：https://www.bilibili.com/video/BV1fE1pztE53（65 秒）
+
+视频使用本仓库自带的合成/无害样例与真实命令输出；本项目是启发式检测工具，边界见上文说明。
+
 ## License
 
 MIT -- see [LICENSE](LICENSE). Pattern ideas are public prior art from OWASP
